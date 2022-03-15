@@ -4,14 +4,14 @@ import Type from "./type";
 type Task = {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   color: Color;
   type: Type;
-  deadline: Date;
-  remindAt: Date;
-  tags: string[];
-  finished: boolean;
-  place: Location;
-}
+  deadline?: Date;
+  remindAt?: Date;
+  tags?: string[];
+  done: boolean;
+  place?: Location;
+};
 
 export default Task;
