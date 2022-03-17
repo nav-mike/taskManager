@@ -16,3 +16,5 @@ const AppHeaderButton: FC<HeaderButtonProps> = (props) => {
     />
   );
 };
+
+export default AppHeaderButton;
