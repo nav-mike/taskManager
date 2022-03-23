@@ -10,9 +10,15 @@ import React, { FC } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "../store/hooks";
 import TaskCard from "../components/TaskCard";
+import { StackNavigatorProps } from "../navigations/StackNavigator";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
 
 const MainScreen: FC = () => {
   const tasks = useAppSelector((state) => state.tasks.tasks);
+  const navigation = useNavigation<MainScreeProps>();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +48,10 @@ const MainScreen: FC = () => {
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => <TaskCard task={itemData.item} />}
       />
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate("NewTask")}
+      >
         <Ionicons name={"add-circle-outline"} size={24} color={"#fff"} />
         <Text style={styles.addButtonText}>Add Task</Text>
       </TouchableOpacity>
