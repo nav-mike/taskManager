@@ -1,17 +1,17 @@
 import React, { FC } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import MainScreen from "../screens/MainScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import AppHeaderButton from "../components/AppHeaderButton";
+import StackNavigator from "./StackNavigator";
 
 const Drawer = createDrawerNavigator<MainNavigatorProps>();
 
 const MainNavigator: FC = () => {
   return (
-    <Drawer.Navigator initialRouteName={"Main"}>
+    <Drawer.Navigator initialRouteName={"Stack"}>
       <Drawer.Screen
-        name={"Main"}
-        component={MainScreen}
+        name={"Stack"}
+        component={StackNavigator}
         options={(props) => ({
           headerTitle: "Task Manager",
           headerRight: () => (
@@ -41,7 +41,7 @@ const MainNavigator: FC = () => {
 };
 
 export type MainNavigatorProps = {
-  Main: undefined;
+  Stack: undefined;
 };
 
 export default MainNavigator;
