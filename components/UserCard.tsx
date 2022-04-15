@@ -1,0 +1,64 @@
+import React, { FC } from "react";
+import { StyleSheet, View, Text, Image } from "react-native";
+import User from "../models/user";
+import { Ionicons } from "@expo/vector-icons";
+
+interface IUserCardProps {
+  user: User;
+}
+
+const UserCard: FC<IUserCardProps> = ({ user }) => {
+  return (
+    <View style={styles.container}>
+      <Image source={{ uri: user.avatar }} style={styles.avatar} />
+      <View style={styles.names}>
+        <Text style={styles.fullName}>{user.fullName}</Text>
+        <Text style={styles.email}>{user.email}</Text>
+      </View>
+      <Ionicons name={"chevron-down-circle"} size={20} color={"#000"} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 3,
+    shadowOpacity: 0.2,
+    elevation: 5,
+    margin: 10,
+    padding: 7,
+    borderRadius: 10,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+  },
+  names: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  fullName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+  email: {
+    fontSize: 14,
+    color: "#8c8b8b",
+    marginTop: 2,
+  },
+});
+
+export default UserCard;
