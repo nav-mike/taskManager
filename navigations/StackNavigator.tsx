@@ -40,7 +40,22 @@ const StackNavigator: FC = () => {
       <Stack.Screen
         name={"NewTask"}
         component={NewTaskScreen}
-        options={{ headerTitle: "New Task" }}
+        options={(props) => {
+          return {
+            headerTitle: "New Task",
+            headerLeft: () => (
+              <HeaderButtons HeaderButtonComponent={AppHeaderButton}>
+                <Item
+                  title={"Cancel"}
+                  iconName={"arrow-back-outline"}
+                  onPress={() => {
+                    props.navigation.goBack();
+                  }}
+                />
+              </HeaderButtons>
+            ),
+          };
+        }}
       />
     </Stack.Navigator>
   );
