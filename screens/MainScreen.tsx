@@ -50,7 +50,7 @@ const MainScreen: FC = () => {
       />
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("NewTask")}
+        onPress={() => navigation.navigate("TaskScreen", { task: undefined })}
       >
         <Ionicons name={"add-circle-outline"} size={24} color={"#fff"} />
         <Text style={styles.addButtonText}>Add Task</Text>

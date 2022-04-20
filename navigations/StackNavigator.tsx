@@ -4,6 +4,7 @@ import MainScreen from "../screens/MainScreen";
 import TaskScreen from "../screens/TaskScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import AppHeaderButton from "../components/AppHeaderButton";
+import Task from "../models/task";
 
 const Stack = createStackNavigator<StackNavigatorProps>();
 
@@ -38,7 +39,7 @@ const StackNavigator: FC = () => {
         })}
       />
       <Stack.Screen
-        name={"NewTask"}
+        name={"TaskScreen"}
         component={TaskScreen}
         options={(props) => {
           return {
@@ -63,7 +64,9 @@ const StackNavigator: FC = () => {
 
 export type StackNavigatorProps = {
   Main: undefined;
-  NewTask: undefined;
+  TaskScreen: {
+    task?: Task;
+  };
 };
 
 export default StackNavigator;
