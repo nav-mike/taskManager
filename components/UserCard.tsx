@@ -4,13 +4,22 @@ import User from "../models/user";
 import { Ionicons } from "@expo/vector-icons";
 import { useBoolean } from "usehooks-ts";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { AuthNavigationParams } from "../navigations/AuthNavigator";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 
 interface IUserCardProps {
   user: User;
 }
 
+type AuthNavigatorProps = StackNavigationProp<
+  AuthNavigationParams,
+  "AuthScreen"
+>;
+
 const UserCard: FC<IUserCardProps> = ({ user }) => {
   const { value, toggle } = useBoolean(false);
+  const { navigate } = useNavigation<AuthNavigatorProps>();
 
   return (
     <View style={styles.container}>
@@ -30,7 +39,13 @@ const UserCard: FC<IUserCardProps> = ({ user }) => {
       </View>
       {value && (
         <View style={styles.button}>
-          <Button color={"#000"} title={"Log In"} onPress={() => {}} />
+          <Button
+            color={"#000"}
+            title={"Log In"}
+            onPress={() => {
+              navigate("AuthScreen");
+            }}
+          />
         </View>
       )}
     </View>
