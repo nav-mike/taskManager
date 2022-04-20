@@ -1,32 +1,44 @@
 import React, { FC } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Button } from "react-native";
 import User from "../models/user";
 import { Ionicons } from "@expo/vector-icons";
+import { useBoolean } from "usehooks-ts";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface IUserCardProps {
   user: User;
 }
 
 const UserCard: FC<IUserCardProps> = ({ user }) => {
+  const { value, toggle } = useBoolean(false);
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: user.avatar }} style={styles.avatar} />
-      <View style={styles.names}>
-        <Text style={styles.fullName}>{user.fullName}</Text>
-        <Text style={styles.email}>{user.email}</Text>
+      <View style={styles.subContainer}>
+        <Image source={{ uri: user.avatar }} style={styles.avatar} />
+        <View style={styles.names}>
+          <Text style={styles.fullName}>{user.fullName}</Text>
+          <Text style={styles.email}>{user.email}</Text>
+        </View>
+        <TouchableOpacity onPress={toggle}>
+          <Ionicons
+            name={value ? "chevron-up-circle" : "chevron-down-circle"}
+            size={20}
+            color={"#000"}
+          />
+        </TouchableOpacity>
       </View>
-      <Ionicons name={"chevron-down-circle"} size={20} color={"#000"} />
+      {value && (
+        <View style={styles.button}>
+          <Button color={"#000"} title={"Log In"} onPress={() => {}} />
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    flexDirection: "row",
-    flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
@@ -39,6 +51,13 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 7,
     borderRadius: 10,
+  },
+  subContainer: {
+    display: "flex",
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
   },
   avatar: {
     width: 40,
@@ -58,6 +77,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#8c8b8b",
     marginTop: 2,
+  },
+  button: {
+    borderRadius: 10,
+    padding: 5,
+    marginTop: 5,
   },
 });
 
