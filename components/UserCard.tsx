@@ -7,6 +7,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthNavigationParams } from "../navigations/AuthNavigator";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+// @ts-ignore
+import avatar from "../assets/avatar.jpg";
 
 interface IUserCardProps {
   user: User;
@@ -24,7 +26,10 @@ const UserCard: FC<IUserCardProps> = ({ user }) => {
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
-        <Image source={{ uri: user.avatar }} style={styles.avatar} />
+        <Image
+          source={user.userType === "local" ? avatar : { uri: user.avatar }}
+          style={styles.avatar}
+        />
         <View style={styles.names}>
           <Text style={styles.fullName}>{user.fullName}</Text>
           <Text style={styles.email}>{user.email}</Text>

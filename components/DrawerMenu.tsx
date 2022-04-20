@@ -5,17 +5,11 @@ import {
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
 import UserCard from "./UserCard";
-import User from "../models/user";
 import DrawerMenuItem from "./DrawerMenuItem";
+import { useAppSelector } from "../store/hooks";
 
 const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
-  const user = {
-    userType: "local",
-    id: "u1",
-    email: "barlyhenan@yahoo.com",
-    fullName: "Barly Nernandito",
-    avatar: "https://i.imgur.com/7yUvePI.png",
-  } as User;
+  const user = useAppSelector((state) => state.user.user);
 
   return (
     <DrawerContentScrollView {...props}>
