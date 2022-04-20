@@ -18,7 +18,7 @@ type AuthNavigatorProps = StackNavigationProp<
 >;
 
 const UserCard: FC<IUserCardProps> = ({ user }) => {
-  const { value, toggle } = useBoolean(false);
+  const { value, toggle, setFalse } = useBoolean(false);
   const { navigate } = useNavigation<AuthNavigatorProps>();
 
   return (
@@ -38,15 +38,27 @@ const UserCard: FC<IUserCardProps> = ({ user }) => {
         </TouchableOpacity>
       </View>
       {value && (
-        <View style={styles.button}>
-          <Button
-            color={"#000"}
-            title={"Log In"}
-            onPress={() => {
-              navigate("AuthScreen");
-            }}
-          />
-        </View>
+        <>
+          <View style={styles.button}>
+            <Button
+              color={"#000"}
+              title={"Log In"}
+              onPress={() => {
+                navigate("AuthScreen");
+                setFalse();
+              }}
+            />
+          </View>
+          <View style={styles.button}>
+            <Button
+              color={"#000"}
+              title={"Settings"}
+              onPress={() => {
+                setFalse();
+              }}
+            />
+          </View>
+        </>
       )}
     </View>
   );
