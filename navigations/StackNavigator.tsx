@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainScreen from "../screens/MainScreen";
-import NewTaskScreen from "../screens/NewTaskScreen";
+import TaskScreen from "../screens/TaskScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import AppHeaderButton from "../components/AppHeaderButton";
 
@@ -39,7 +39,7 @@ const StackNavigator: FC = () => {
       />
       <Stack.Screen
         name={"NewTask"}
-        component={NewTaskScreen}
+        component={TaskScreen}
         options={(props) => {
           return {
             headerTitle: "New Task",

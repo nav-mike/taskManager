@@ -15,9 +15,9 @@ import ColorCircle from "../components/ColorCircle";
 import { Ionicons } from "@expo/vector-icons";
 import CalendarPicker from "react-native-calendar-picker";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
-import Type, { TaskTypeEnum } from "../models/type";
+import { TaskTypeEnum } from "../models/type";
 
-const NewTaskScreen: FC = () => {
+const TaskScreen: FC = () => {
   const { value: isShowColorPicker, toggle: toggleColorPicker } =
     useBoolean(false);
   const { value: isShowDatePicker, toggle: toggleDatePicker } =
@@ -269,4 +269,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewTaskScreen;
+export default TaskScreen;
