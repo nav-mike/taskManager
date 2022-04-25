@@ -65,7 +65,7 @@ const StackNavigator: FC = () => {
 export type StackNavigatorProps = {
   Main: undefined;
   TaskScreen: {
-    task?: Task;
+    task_id?: string;
   };
 };
 

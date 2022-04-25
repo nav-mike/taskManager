@@ -3,12 +3,20 @@ import Task from "../models/task";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { DateTime } from "luxon";
+import { useNavigation } from "@react-navigation/native";
+import { MainScreeProps } from "../screens/MainScreen";
 
 interface ITaskCardProps {
   task: Task;
 }
 
 const TaskCard: FC<ITaskCardProps> = (props) => {
+  const navigation = useNavigation<MainScreeProps>();
+
+  const goToEditHandler = () => {
+    navigation.navigate("TaskScreen", { task_id: props.task.id });
+  };
+
   const cardStyle = {
     ...styles.card,
     backgroundColor: props.task.color,
@@ -23,7 +31,7 @@ const TaskCard: FC<ITaskCardProps> = (props) => {
             </Text>
           ))}
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={goToEditHandler}>
           <Ionicons name={"create-outline"} size={17} color={"#000"} />
         </TouchableOpacity>
       </View>

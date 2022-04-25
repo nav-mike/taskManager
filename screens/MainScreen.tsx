@@ -14,7 +14,7 @@ import { StackNavigatorProps } from "../navigations/StackNavigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
+export type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
 
 const MainScreen: FC = () => {
   const tasks = useAppSelector((state) => state.tasks.tasks);

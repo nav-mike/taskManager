@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useLayoutEffect, useState } from "react";
 import {
   Button,
   KeyboardAvoidingView,
@@ -16,6 +16,12 @@ import { Ionicons } from "@expo/vector-icons";
 import CalendarPicker from "react-native-calendar-picker";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
 import { TaskTypeEnum } from "../models/type";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
+import { StackNavigatorProps } from "../navigations/StackNavigator";
+
+type Props = StackScreenProps<StackNavigatorProps, "TaskScreen">;
+type TaskScreeProps = StackNavigationProp<StackNavigatorProps, "TaskScreen">;
 
 const TaskScreen: FC = () => {
   const { value: isShowColorPicker, toggle: toggleColorPicker } =
@@ -26,6 +32,15 @@ const TaskScreen: FC = () => {
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<Date>(new Date());
   const [type, setType] = useState("Basic");
+  const route = useRoute<Props["route"]>();
+  const navigation = useNavigation<TaskScreeProps>();
+  const { task_id } = route.params;
+
+  useLayoutEffect(() => {
+    if (task_id) {
+      navigation.setOptions({ headerTitle: "task.title" });
+    }
+  }, []);
 
   const onPickColor = (color: Color) => {
     setColor(color);
