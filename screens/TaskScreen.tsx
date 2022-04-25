@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useState } from "react";
+import React, { FC, useEffect, useLayoutEffect, useState } from "react";
 import {
   Button,
   KeyboardAvoidingView,
@@ -19,26 +19,46 @@ import { TaskTypeEnum } from "../models/type";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorProps } from "../navigations/StackNavigator";
+import Task from "../models/task";
+import { useAppSelector } from "../store/hooks";
+import moment from "moment";
 
 type Props = StackScreenProps<StackNavigatorProps, "TaskScreen">;
 type TaskScreeProps = StackNavigationProp<StackNavigatorProps, "TaskScreen">;
 
 const TaskScreen: FC = () => {
+  const route = useRoute<Props["route"]>();
+  const { task_id } = route.params;
+  const tasks = useAppSelector((state) => state.tasks.tasks);
+  let currentTask: Task | undefined = undefined;
+
+  if (task_id) {
+    currentTask = tasks.find((task) => task.id === task_id);
+  }
+
   const { value: isShowColorPicker, toggle: toggleColorPicker } =
     useBoolean(false);
   const { value: isShowDatePicker, toggle: toggleDatePicker } =
     useBoolean(false);
-  const [color, setColor] = useState(Color.Yellow);
-  const [date, setDate] = useState<string>("");
-  const [time, setTime] = useState<Date>(new Date());
-  const [type, setType] = useState("Basic");
-  const route = useRoute<Props["route"]>();
+
+  const [title, setTitle] = useState<string>(currentTask?.title || "");
+  const [color, setColor] = useState(currentTask?.color || Color.Yellow);
+  const [description, setDescription] = useState<string>(
+    currentTask?.description || ""
+  );
+  const [date, setDate] = useState<string>(
+    moment(currentTask?.deadline).format("DD MMMM YYYY") || ""
+  );
+  const [time, setTime] = useState<Date>(currentTask?.remindAt || new Date());
+  const [type, setType] = useState(currentTask?.type.toString() || "Basic");
+  const [place, setPlace] = useState<string>(currentTask?.place || "");
+  const [tags, setTags] = useState<string[]>(currentTask?.tags || []);
+
   const navigation = useNavigation<TaskScreeProps>();
-  const { task_id } = route.params;
 
   useLayoutEffect(() => {
-    if (task_id) {
-      navigation.setOptions({ headerTitle: "task.title" });
+    if (currentTask) {
+      navigation.setOptions({ headerTitle: currentTask.title });
     }
   }, []);
 
@@ -58,7 +78,8 @@ const TaskScreen: FC = () => {
                 style={styles.textInput}
                 multiline={true}
                 placeholder={"What do you need to do?"}
-                value={"Meetings With Client About UI / UX Designer"}
+                value={title}
+                onChangeText={(text) => setTitle(text)}
               />
               <ColorCircle color={color} onPress={toggleColorPicker} />
             </View>
@@ -116,6 +137,8 @@ const TaskScreen: FC = () => {
                 style={{ ...styles.textInput, ...styles.bottomBorder }}
                 multiline={true}
                 placeholder={"What do you need to do?"}
+                value={description}
+                onChangeText={(text) => setDescription(text)}
               />
             </View>
           </View>
@@ -156,6 +179,8 @@ const TaskScreen: FC = () => {
               <TextInput
                 style={{ ...styles.textInput, ...styles.bottomBorder }}
                 placeholder={"Specify the place if need it"}
+                value={place}
+                onChangeText={(text) => setPlace(text)}
               />
             </View>
           </View>
@@ -208,6 +233,10 @@ const TaskScreen: FC = () => {
                 multiline={true}
                 style={{ ...styles.textInput, ...styles.bottomBorder }}
                 placeholder={"Define list of tags using ',' as a separator"}
+                value={tags.join(", ")}
+                onChangeText={(text) => {
+                  setTags(text.split(",").map((tag) => tag.trim()));
+                }}
               />
             </View>
           </View>

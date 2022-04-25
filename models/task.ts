@@ -11,7 +11,7 @@ type Task = {
   remindAt?: Date;
   tags?: string[];
   done: boolean;
-  place?: Location;
+  place?: string;
 };
 
 export default Task;
