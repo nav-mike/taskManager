@@ -38,7 +38,7 @@ export const initialState: State = {
       deadline: new Date(2021, 10, 12, 14, 0),
       remindAt: new Date(2021, 10, 12, 13, 0),
       tags: ["Lifestyle", "Home"],
-      done: false,
+      done: true,
     },
   ],
 };

@@ -17,7 +17,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 export type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
 
 const MainScreen: FC = () => {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const tasks = useAppSelector((state) => state.tasks.tasks).filter(
+    (task) => !task.done
+  );
   const navigation = useNavigation<MainScreeProps>();
 
   return (
@@ -50,7 +52,9 @@ const MainScreen: FC = () => {
       />
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("TaskScreen", { task: undefined })}
+        onPress={() =>
+          navigation.navigate("TaskScreen", { task_id: undefined })
+        }
       >
         <Ionicons name={"add-circle-outline"} size={24} color={"#fff"} />
         <Text style={styles.addButtonText}>Add Task</Text>
