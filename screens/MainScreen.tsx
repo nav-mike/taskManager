@@ -13,12 +13,13 @@ import TaskCard from "../components/TaskCard";
 import { StackNavigatorProps } from "../navigations/StackNavigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { compareDates } from "../utils/compareDates";
 
 export type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
 
 const MainScreen: FC = () => {
   const tasks = useAppSelector((state) => state.tasks.tasks).filter(
-    (task) => !task.done
+    (task) => !task.done && compareDates(new Date(), task?.deadline)
   );
   const navigation = useNavigation<MainScreeProps>();
 
