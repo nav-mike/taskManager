@@ -4,14 +4,14 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { DateTime } from "luxon";
 import { useNavigation } from "@react-navigation/native";
-import { MainScreeProps } from "../screens/MainScreen";
+import { MainScreenProps } from "../screens/MainScreen";
 
 interface ITaskCardProps {
   task: Task;
 }
 
 const TaskCard: FC<ITaskCardProps> = (props) => {
-  const navigation = useNavigation<MainScreeProps>();
+  const navigation = useNavigation<MainScreenProps>();
 
   const goToEditHandler = () => {
     navigation.navigate("TaskScreen", { task_id: props.task.id });

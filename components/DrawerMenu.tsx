@@ -8,8 +8,12 @@ import UserCard from "./UserCard";
 import DrawerMenuItem from "./DrawerMenuItem";
 import { useAppSelector } from "../store/hooks";
 import * as _ from "lodash";
+import { useNavigation } from "@react-navigation/native";
+import { MainScreenProps } from "../screens/MainScreen";
 
 const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
+  const navigation = useNavigation<MainScreenProps>();
+
   const user = useAppSelector((state) => state.user.user);
   const tasks = useAppSelector((state) => state.tasks.tasks);
   const tags = _.uniq(
@@ -22,17 +26,26 @@ const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
       <DrawerMenuItem
         title={"My Daily"}
         icon={"star-half-outline"}
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          navigation.navigate("Main", { filter: "today" });
+        }}
       />
       <DrawerMenuItem
         title={"Upcoming"}
         icon={"calendar-outline"}
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          navigation.navigate("Main", { filter: "upcoming" });
+        }}
       />
       <DrawerMenuItem
         title={"Tasks Done"}
         icon={"checkmark-circle-outline"}
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          navigation.navigate("Main", { filter: "done" });
+        }}
       />
       <Text style={styles.title}>Title: My List Task</Text>
       {tags.map((tag) => (

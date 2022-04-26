@@ -6,17 +6,18 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "../store/hooks";
 import TaskCard from "../components/TaskCard";
 import { StackNavigatorProps } from "../navigations/StackNavigator";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { equalsDates, moreThanDate } from "../utils/datesCompares";
 import Task from "../models/task";
 
-export type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
+export type MainScreenProps = StackNavigationProp<StackNavigatorProps, "Main">;
+type Props = StackScreenProps<StackNavigatorProps, "Main">;
 
 const filterForToday = (task: Task) =>
   !task.done && equalsDates(new Date(), task?.deadline);
@@ -42,11 +43,20 @@ const filterByModel: (
 };
 
 const MainScreen: FC = () => {
-  const navigation = useNavigation<MainScreeProps>();
+  const navigation = useNavigation<MainScreenProps>();
+  const route = useRoute<Props["route"]>();
+  const filter = route.params?.filter;
 
   const [filterMode, setFilterMode] = useState<"today" | "upcoming" | "done">(
     "today"
   );
+
+  useEffect(() => {
+    if (filter) {
+      setFilterMode(filter);
+    }
+  }, [filter]);
+
   const tasks = useAppSelector((state) => state.tasks.tasks).filter(
     filterByModel(filterMode)
   );

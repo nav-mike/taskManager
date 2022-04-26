@@ -4,7 +4,6 @@ import MainScreen from "../screens/MainScreen";
 import TaskScreen from "../screens/TaskScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import AppHeaderButton from "../components/AppHeaderButton";
-import Task from "../models/task";
 
 const Stack = createStackNavigator<StackNavigatorProps>();
 
@@ -63,7 +62,9 @@ const StackNavigator: FC = () => {
 };
 
 export type StackNavigatorProps = {
-  Main: undefined;
+  Main: {
+    filter?: "today" | "upcoming" | "done";
+  };
   TaskScreen: {
     task_id?: string;
   };
