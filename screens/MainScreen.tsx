@@ -6,22 +6,50 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "../store/hooks";
 import TaskCard from "../components/TaskCard";
 import { StackNavigatorProps } from "../navigations/StackNavigator";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { compareDates } from "../utils/compareDates";
+import { equalsDates, moreThanDate } from "../utils/datesCompares";
+import Task from "../models/task";
 
 export type MainScreeProps = StackNavigationProp<StackNavigatorProps, "Main">;
 
+const filterForToday = (task: Task) =>
+  !task.done && equalsDates(new Date(), task?.deadline);
+
+const filterForUpcoming = (task: Task) =>
+  moreThanDate(new Date(), task?.deadline);
+
+const filterForDone = (task: Task) => task.done;
+
+const filterByModel: (
+  mode: "today" | "upcoming" | "done"
+) => (task: Task) => boolean = (mode) => {
+  switch (mode) {
+    case "today":
+      return filterForToday;
+    case "upcoming":
+      return filterForUpcoming;
+    case "done":
+      return filterForDone;
+    default:
+      return filterForToday;
+  }
+};
+
 const MainScreen: FC = () => {
-  const tasks = useAppSelector((state) => state.tasks.tasks).filter(
-    (task) => !task.done && compareDates(new Date(), task?.deadline)
-  );
   const navigation = useNavigation<MainScreeProps>();
+
+  const [filterMode, setFilterMode] = useState<"today" | "upcoming" | "done">(
+    "today"
+  );
+  const tasks = useAppSelector((state) => state.tasks.tasks).filter(
+    filterByModel(filterMode)
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,14 +63,29 @@ const MainScreen: FC = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.tabs}>
-        <TouchableOpacity style={styles.currentTab}>
-          <Text style={styles.currentTabText}>Today</Text>
+        <TouchableOpacity
+          style={filterMode === "today" && styles.currentTab}
+          onPress={() => setFilterMode("today")}
+        >
+          <Text style={filterMode === "today" && styles.currentTabText}>
+            Today
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Upcoming</Text>
+        <TouchableOpacity
+          style={filterMode === "upcoming" && styles.currentTab}
+          onPress={() => setFilterMode("upcoming")}
+        >
+          <Text style={filterMode === "upcoming" && styles.currentTabText}>
+            Upcoming
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Task Done</Text>
+        <TouchableOpacity
+          style={filterMode === "done" && styles.currentTab}
+          onPress={() => setFilterMode("done")}
+        >
+          <Text style={filterMode === "done" && styles.currentTabText}>
+            Task Done
+          </Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -92,7 +135,7 @@ const styles = StyleSheet.create({
   },
   tasksList: {
     flex: 1,
-    margin: 20,
+    padding: 20,
   },
   searchButton: {
     padding: 10,
