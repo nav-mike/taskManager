@@ -13,8 +13,20 @@ export const initialState: State = {
       description: "I have to take my sister to school",
       color: Color.LightGreen,
       type: "Basic",
-      deadline: new Date(2021, 10, 12, 7, 30),
-      remindAt: new Date(2021, 10, 12, 7, 15),
+      deadline: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        7,
+        30
+      ),
+      remindAt: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        7,
+        15
+      ),
       tags: ["School", "Everyday"],
       done: false,
     },
@@ -24,7 +36,13 @@ export const initialState: State = {
       description: "I have to create a banner in canva",
       color: Color.Yellow,
       type: "Urgent",
-      deadline: new Date(2021, 10, 12, 10, 0),
+      deadline: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        10,
+        0
+      ),
       tags: ["Works", "Activity"],
       done: false,
     },
@@ -35,8 +53,20 @@ export const initialState: State = {
         "I have to buy a washing machine, a refrigerator and a dishwasher",
       color: Color.LightBlue,
       type: "Basic",
-      deadline: new Date(2021, 10, 12, 14, 0),
-      remindAt: new Date(2021, 10, 12, 13, 0),
+      deadline: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        14,
+        0
+      ),
+      remindAt: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        13,
+        0
+      ),
       tags: ["Lifestyle", "Home"],
       done: true,
     },
