@@ -7,9 +7,14 @@ import {
 import UserCard from "./UserCard";
 import DrawerMenuItem from "./DrawerMenuItem";
 import { useAppSelector } from "../store/hooks";
+import * as _ from "lodash";
 
 const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
   const user = useAppSelector((state) => state.user.user);
+  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const tags = _.uniq(
+    _.compact(_.flatten(tasks.map((task) => task.tags)))
+  ).sort();
 
   return (
     <DrawerContentScrollView {...props}>
@@ -30,16 +35,14 @@ const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
         onPress={() => {}}
       />
       <Text style={styles.title}>Title: My List Task</Text>
-      <DrawerMenuItem
-        title={"Money saver"}
-        icon={"list-circle-outline"}
-        onPress={() => {}}
-      />
-      <DrawerMenuItem
-        title={"Monthly Expenditure"}
-        icon={"list-circle-outline"}
-        onPress={() => {}}
-      />
+      {tags.map((tag) => (
+        <DrawerMenuItem
+          key={tag}
+          title={tag}
+          icon={"list-circle-outline"}
+          onPress={() => {}}
+        />
+      ))}
     </DrawerContentScrollView>
   );
 };
