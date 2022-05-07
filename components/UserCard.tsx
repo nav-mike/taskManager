@@ -14,10 +14,9 @@ interface IUserCardProps {
   user: User;
 }
 
-type AuthNavigatorProps = StackNavigationProp<
-  AuthNavigationParams,
-  "AuthScreen"
->;
+type AuthNavigatorProps =
+  | StackNavigationProp<AuthNavigationParams, "AuthScreen">
+  | StackNavigationProp<AuthNavigationParams, "SettingsScreen">;
 
 const UserCard: FC<IUserCardProps> = ({ user }) => {
   const { value, toggle, setFalse } = useBoolean(false);
@@ -59,6 +58,7 @@ const UserCard: FC<IUserCardProps> = ({ user }) => {
               color={"#000"}
               title={"Settings"}
               onPress={() => {
+                navigate("SettingsScreen");
                 setFalse();
               }}
             />

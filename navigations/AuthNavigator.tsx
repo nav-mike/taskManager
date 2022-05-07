@@ -4,6 +4,7 @@ import MainNavigator from "./MainNavigator";
 import AuthScreen from "../screens/AuthScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import AppHeaderButton from "../components/AppHeaderButton";
+import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,26 @@ const AuthNavigator: FC = () => {
           };
         }}
       />
+      <Stack.Screen
+        name={"SettingsScreen"}
+        component={SettingsScreen}
+        options={(props) => {
+          return {
+            headerTitle: "Settings",
+            headerLeft: () => (
+              <HeaderButtons HeaderButtonComponent={AppHeaderButton}>
+                <Item
+                  title={"Cancel"}
+                  iconName={"arrow-back-outline"}
+                  onPress={() => {
+                    props.navigation.goBack();
+                  }}
+                />
+              </HeaderButtons>
+            ),
+          };
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -45,6 +66,7 @@ const AuthNavigator: FC = () => {
 export type AuthNavigationParams = {
   MainNavigator: undefined;
   AuthScreen: undefined;
+  SettingsScreen: undefined;
 };
 
 export default AuthNavigator;
