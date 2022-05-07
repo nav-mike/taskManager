@@ -17,6 +17,7 @@ import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { equalsDates, moreThanDate } from "../utils/datesCompares";
 import Task from "../models/task";
 import { useBoolean } from "usehooks-ts";
+import Fuse from "fuse.js";
 
 export type MainScreenProps = StackNavigationProp<StackNavigatorProps, "Main">;
 type Props = StackScreenProps<StackNavigatorProps, "Main">;
@@ -45,12 +46,22 @@ const filterByMode: (mode: string) => (task: Task) => boolean = (mode) => {
   }
 };
 
+const filterBySearch = (searchValue: string) => (task: Task) => {
+  return (
+    task.title.includes(searchValue) ||
+    task.description?.includes(searchValue) ||
+    task.tags?.includes(searchValue) ||
+    false
+  );
+};
+
 const MainScreen: FC = () => {
   const navigation = useNavigation<MainScreenProps>();
   const route = useRoute<Props["route"]>();
   const filter = route.params?.filter;
 
   const [filterMode, setFilterMode] = useState<string>("today");
+  const [search, setSearch] = useState<string>("");
   const {
     value: isShowSearch,
     setTrue: showSearch,
@@ -63,9 +74,17 @@ const MainScreen: FC = () => {
     }
   }, [filter]);
 
-  const tasks = useAppSelector((state) => state.tasks.tasks).filter(
-    filterByMode(filterMode)
-  );
+  let tasks = useAppSelector((state) => state.tasks.tasks);
+
+  tasks =
+    filterMode !== "search"
+      ? tasks.filter(filterByMode(filterMode))
+      : tasks.filter(filterBySearch(search));
+
+  const searchHandler = () => {
+    hideSearch();
+    setFilterMode("search");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -85,42 +104,42 @@ const MainScreen: FC = () => {
           <View style={styles.searchForm}>
             <Ionicons name={"search-outline"} size={24} color={"#000"} />
             <TextInput
-              onSubmitEditing={hideSearch}
+              onSubmitEditing={searchHandler}
               placeholder={"Type your search here"}
               autoFocus={isShowSearch}
               style={styles.searchInput}
+              onChangeText={setSearch}
             />
           </View>
         )}
       </View>
-      {!isShowSearch && (
-        <View style={styles.tabs}>
-          <TouchableOpacity
-            style={filterMode === "today" && styles.currentTab}
-            onPress={() => setFilterMode("today")}
-          >
-            <Text style={filterMode === "today" && styles.currentTabText}>
-              Today
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={filterMode === "upcoming" && styles.currentTab}
-            onPress={() => setFilterMode("upcoming")}
-          >
-            <Text style={filterMode === "upcoming" && styles.currentTabText}>
-              Upcoming
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={filterMode === "done" && styles.currentTab}
-            onPress={() => setFilterMode("done")}
-          >
-            <Text style={filterMode === "done" && styles.currentTabText}>
-              Task Done
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
+
+      <View style={styles.tabs}>
+        <TouchableOpacity
+          style={filterMode === "today" && styles.currentTab}
+          onPress={() => setFilterMode("today")}
+        >
+          <Text style={filterMode === "today" && styles.currentTabText}>
+            Today
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={filterMode === "upcoming" && styles.currentTab}
+          onPress={() => setFilterMode("upcoming")}
+        >
+          <Text style={filterMode === "upcoming" && styles.currentTabText}>
+            Upcoming
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={filterMode === "done" && styles.currentTab}
+          onPress={() => setFilterMode("done")}
+        >
+          <Text style={filterMode === "done" && styles.currentTabText}>
+            Task Done
+          </Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         style={styles.tasksList}
         data={tasks}
