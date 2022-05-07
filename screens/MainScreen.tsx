@@ -23,7 +23,7 @@ const filterForToday = (task: Task) =>
   !task.done && equalsDates(new Date(), task?.deadline);
 
 const filterForUpcoming = (task: Task) =>
-  moreThanDate(new Date(), task?.deadline);
+  moreThanDate(new Date(), task?.deadline) && !task.done;
 
 const filterForDone = (task: Task) => task.done;
 
