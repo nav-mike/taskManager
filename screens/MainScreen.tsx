@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 import React, { FC, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +16,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { equalsDates, moreThanDate } from "../utils/datesCompares";
 import Task from "../models/task";
+import { useBoolean } from "usehooks-ts";
 
 export type MainScreenProps = StackNavigationProp<StackNavigatorProps, "Main">;
 type Props = StackScreenProps<StackNavigatorProps, "Main">;
@@ -49,6 +51,11 @@ const MainScreen: FC = () => {
   const filter = route.params?.filter;
 
   const [filterMode, setFilterMode] = useState<string>("today");
+  const {
+    value: isShowSearch,
+    setTrue: showSearch,
+    setFalse: hideSearch,
+  } = useBoolean(false);
 
   useEffect(() => {
     if (filter) {
@@ -63,40 +70,57 @@ const MainScreen: FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View>
-          <Text style={styles.welcome}>Welcome Back!</Text>
-          <Text style={styles.today}>Here's Update Today.</Text>
+        {!isShowSearch && (
+          <>
+            <View>
+              <Text style={styles.welcome}>Welcome Back!</Text>
+              <Text style={styles.today}>Here's Update Today.</Text>
+            </View>
+            <TouchableOpacity onPress={showSearch} style={styles.searchButton}>
+              <Ionicons name={"search-outline"} size={24} color={"#fff"} />
+            </TouchableOpacity>
+          </>
+        )}
+        {isShowSearch && (
+          <View style={styles.searchForm}>
+            <Ionicons name={"search-outline"} size={24} color={"#000"} />
+            <TextInput
+              onSubmitEditing={hideSearch}
+              placeholder={"Type your search here"}
+              autoFocus={isShowSearch}
+              style={styles.searchInput}
+            />
+          </View>
+        )}
+      </View>
+      {!isShowSearch && (
+        <View style={styles.tabs}>
+          <TouchableOpacity
+            style={filterMode === "today" && styles.currentTab}
+            onPress={() => setFilterMode("today")}
+          >
+            <Text style={filterMode === "today" && styles.currentTabText}>
+              Today
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={filterMode === "upcoming" && styles.currentTab}
+            onPress={() => setFilterMode("upcoming")}
+          >
+            <Text style={filterMode === "upcoming" && styles.currentTabText}>
+              Upcoming
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={filterMode === "done" && styles.currentTab}
+            onPress={() => setFilterMode("done")}
+          >
+            <Text style={filterMode === "done" && styles.currentTabText}>
+              Task Done
+            </Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.searchButton}>
-          <Ionicons name={"search-outline"} size={24} color={"#fff"} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.tabs}>
-        <TouchableOpacity
-          style={filterMode === "today" && styles.currentTab}
-          onPress={() => setFilterMode("today")}
-        >
-          <Text style={filterMode === "today" && styles.currentTabText}>
-            Today
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={filterMode === "upcoming" && styles.currentTab}
-          onPress={() => setFilterMode("upcoming")}
-        >
-          <Text style={filterMode === "upcoming" && styles.currentTabText}>
-            Upcoming
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={filterMode === "done" && styles.currentTab}
-          onPress={() => setFilterMode("done")}
-        >
-          <Text style={filterMode === "done" && styles.currentTabText}>
-            Task Done
-          </Text>
-        </TouchableOpacity>
-      </View>
+      )}
       <FlatList
         style={styles.tasksList}
         data={tasks}
@@ -177,6 +201,17 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "#fff",
     marginHorizontal: 10,
+  },
+  searchForm: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#f5f7fb",
+    flex: 1,
+    borderRadius: 20,
+  },
+  searchInput: {
+    marginLeft: 10,
   },
 });
 
