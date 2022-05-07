@@ -27,9 +27,10 @@ const filterForUpcoming = (task: Task) =>
 
 const filterForDone = (task: Task) => task.done;
 
-const filterByModel: (
-  mode: "today" | "upcoming" | "done"
-) => (task: Task) => boolean = (mode) => {
+const filterByTag = (tag: string) => (task: Task) =>
+  task.tags?.includes(tag) || false;
+
+const filterByModel: (mode: string) => (task: Task) => boolean = (mode) => {
   switch (mode) {
     case "today":
       return filterForToday;
@@ -38,7 +39,7 @@ const filterByModel: (
     case "done":
       return filterForDone;
     default:
-      return filterForToday;
+      return filterByTag(mode);
   }
 };
 
@@ -47,9 +48,7 @@ const MainScreen: FC = () => {
   const route = useRoute<Props["route"]>();
   const filter = route.params?.filter;
 
-  const [filterMode, setFilterMode] = useState<"today" | "upcoming" | "done">(
-    "today"
-  );
+  const [filterMode, setFilterMode] = useState<string>("today");
 
   useEffect(() => {
     if (filter) {

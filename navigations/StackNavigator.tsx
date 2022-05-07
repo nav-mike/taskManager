@@ -63,7 +63,7 @@ const StackNavigator: FC = () => {
 
 export type StackNavigatorProps = {
   Main: {
-    filter?: "today" | "upcoming" | "done";
+    filter?: string;
   };
   TaskScreen: {
     task_id?: string;

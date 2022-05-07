@@ -53,7 +53,10 @@ const DrawerMenu: FC<DrawerContentComponentProps> = (props) => {
           key={tag}
           title={tag}
           icon={"list-circle-outline"}
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.closeDrawer();
+            navigation.navigate("Main", { filter: tag });
+          }}
         />
       ))}
     </DrawerContentScrollView>
