@@ -32,7 +32,7 @@ const filterForDone = (task: Task) => task.done;
 const filterByTag = (tag: string) => (task: Task) =>
   task.tags?.includes(tag) || false;
 
-const filterByModel: (mode: string) => (task: Task) => boolean = (mode) => {
+const filterByMode: (mode: string) => (task: Task) => boolean = (mode) => {
   switch (mode) {
     case "today":
       return filterForToday;
@@ -64,7 +64,7 @@ const MainScreen: FC = () => {
   }, [filter]);
 
   const tasks = useAppSelector((state) => state.tasks.tasks).filter(
-    filterByModel(filterMode)
+    filterByMode(filterMode)
   );
 
   return (
